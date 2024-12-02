@@ -1,7 +1,6 @@
 use std::collections::HashMap;
 
-#[aoc_generator(day1)]
-pub fn parse_input(input: &str) -> (Vec<i32>, Vec<i32>) {
+fn parse_input(input: &str) -> (Vec<i32>, Vec<i32>) {
 	let mut list1 = Vec::new();
 	let mut list2 = Vec::new();
 	
@@ -14,8 +13,8 @@ pub fn parse_input(input: &str) -> (Vec<i32>, Vec<i32>) {
 }
 
 #[aoc(day1, part1)]
-pub fn part1(lists: &(Vec<i32>, Vec<i32>)) -> i32 {
-	let (mut list1, mut list2) = lists.clone();
+pub fn part1(input: &str) -> i32 {
+	let (mut list1, mut list2) = parse_input(input);
 	list1.sort();
 	list2.sort();
 	list1.iter()
@@ -26,8 +25,8 @@ pub fn part1(lists: &(Vec<i32>, Vec<i32>)) -> i32 {
 }
 
 #[aoc(day1, part2)]
-pub fn part2(lists: &(Vec<i32>, Vec<i32>)) -> i32 {
-	let (list1, list2) = lists.clone();
+pub fn part2(input: &str) -> i32 {
+	let (list1, list2) = parse_input(input);
 	let mut res = 0;
 	let mut map: HashMap<i32, i32> = HashMap::new();
 	for n in list2 {

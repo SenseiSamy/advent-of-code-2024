@@ -14,7 +14,7 @@ pub fn parse_input(input: &str) -> (Vec<i32>, Vec<i32>) {
 }
 
 #[aoc(day1, part1)]
-fn part1(lists: &(Vec<i32>, Vec<i32>)) -> i32 {
+pub fn part1(lists: &(Vec<i32>, Vec<i32>)) -> i32 {
 	let (mut list1, mut list2) = lists.clone();
 	list1.sort();
 	list2.sort();
@@ -26,7 +26,7 @@ fn part1(lists: &(Vec<i32>, Vec<i32>)) -> i32 {
 }
 
 #[aoc(day1, part2)]
-fn part2(lists: &(Vec<i32>, Vec<i32>)) -> i32 {
+pub fn part2(lists: &(Vec<i32>, Vec<i32>)) -> i32 {
 	let (list1, list2) = lists.clone();
 	let mut res = 0;
 	let mut map: HashMap<i32, i32> = HashMap::new();

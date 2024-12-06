@@ -1,66 +1,50 @@
 use std::collections::HashMap;
+use std::cmp::Ordering::{Less, Greater};
 
 #[aoc(day5, part1)]
 fn part1(input: &str) -> i32 {
 	let mut res = 0;
-	let mut rules: HashMap<i32, Vec<i32>> = HashMap::new();
+	let mut rules: HashMap<(i32, i32), bool> = HashMap::new();
 	let mut parse_rule = true;
-	'main: for line in input.lines() {
+	for line in input.lines() {
 		if line == "" {
 			parse_rule = false;
 		} else if parse_rule {
 			let v: Vec<i32> = line.split('|').map(|e| e.parse::<i32>().unwrap()).collect();
-			rules.entry(v[0]).and_modify(|e| e.push(v[1])).or_insert(Vec::from([v[1]]));
+			rules.insert((v[0], v[1]), true);
+			rules.insert((v[1], v[0]), false);
 		} else {
 			let update: Vec<i32> = line.split(',').map(|e| e.parse::<i32>().unwrap()).collect();
 			let len = update.len();
-			for i in (0..len).rev() {
-				if let Some(values) = rules.get(&update[i]) {
-					for y in (0..i).rev() {
-						if values.contains(&update[y]) {
-							continue 'main;
-						}
-					}
-				}
+			if update.is_sorted_by(|a, b| rules[&(*a, *b)]) {
+				res += update[len / 2];
 			}
-			res += update[len / 2];
 		}
 	}
 	res
 }
 
-fn part2_sort(array: &mut Vec<i32>, rules: &HashMap<i32, Vec<i32>>) -> i32 {
-	let mut sorted = array.clone();
-	while !array.is_empty() {
-		
-	}
-
-	1
-}
-
 #[aoc(day5, part2)]
 fn part2(input: &str) -> i32 {
 	let mut res = 0;
-	let mut rules: HashMap<i32, Vec<i32>> = HashMap::new();
+	let mut rules: HashMap<(i32, i32), bool> = HashMap::new();
 	let mut parse_rule = true;
-	'main: for line in input.lines() {
+	for line in input.lines() {
 		if line == "" {
 			parse_rule = false;
 		} else if parse_rule {
 			let v: Vec<i32> = line.split('|').map(|e| e.parse::<i32>().unwrap()).collect();
-			rules.entry(v[0]).and_modify(|e| e.push(v[1])).or_insert(Vec::from([v[1]]));
+			rules.insert((v[0], v[1]), true);
+			rules.insert((v[1], v[0]), false);
 		} else {
 			let mut update: Vec<i32> = line.split(',').map(|e| e.parse::<i32>().unwrap()).collect();
 			let len = update.len();
-			for i in (0..len).rev() {
-				if let Some(values) = rules.get(&update[i]) {
-					for y in (0..i).rev() {
-						if values.contains(&update[y]) {
-							res += part2_sort(&mut update, &rules);
-							continue 'main;
-						}
-					}
-				}
+			if !update.is_sorted_by(|a, b| rules[&(*a, *b)]) {
+				update.sort_by(|a, b| match rules[&(*a, *b)] {
+					true => Less,
+					false => Greater
+				});
+				res += update[len / 2];
 			}
 		}
 	}
